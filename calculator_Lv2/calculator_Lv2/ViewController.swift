@@ -179,6 +179,22 @@ class ViewController: UIViewController {
     
     // 숫자버튼 액션
     @objc private func buttonTapped(sender: UIButton) {
+        var currentText = label.text ?? "" // 현재 label 텍스트
+        
+        // 버튼 타이틀 가져오기
+        let buttonText = sender.title(for: .normal) ?? ""
+        
+        
+        // 버튼 클릭 시, label 텍스트 뒤에 버튼 텍스트 추가
+        currentText += buttonText
+        
+        // 0으로 시작하면 0 제거
+        if currentText.hasPrefix("0") && currentText.count > 1 {
+            currentText.removeFirst()
+        }
+        
+        // 새로운 텍스트로 label 업데이트
+        label.text = currentText
         print("\(sender.title(for: .normal) ?? "") 버튼 클릭됨")
     }
     
