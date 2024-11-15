@@ -200,6 +200,14 @@ class ViewController: UIViewController {
     
     // 연산자버튼 액션
     @objc private func operatorButtonTapped(sender: UIButton) {
+        guard var currentText = label.text else { return }
+        
+        // 연산자 추가
+        let operatorText = sender.title(for: .normal) ?? ""
+        
+        currentText += " " + operatorText + " "
+        
+        label.text = currentText
         print("\(sender.title(for: .normal) ?? "") 연산자 버튼 클릭 됨")
     }
     
