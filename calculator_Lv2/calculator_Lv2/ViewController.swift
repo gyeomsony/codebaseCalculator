@@ -7,6 +7,7 @@
 import UIKit
 import SnapKit
 
+// MARK: - UI 로직
 class ViewController: UIViewController {
     
     var label = UILabel()
@@ -123,11 +124,11 @@ class ViewController: UIViewController {
         }
         
         let mainStackView = UIStackView(arrangedSubviews: [firstStackView, secondStackView, thirdStackView, lastStackView])
-            mainStackView.axis = .vertical
-            mainStackView.spacing = 10
-            mainStackView.distribution = .fillEqually
-
-            view.addSubview(mainStackView)
+        mainStackView.axis = .vertical
+        mainStackView.spacing = 10
+        mainStackView.distribution = .fillEqually
+        
+        view.addSubview(mainStackView)
         
         mainStackView.snp.makeConstraints {
             $0.width.equalTo(350)
@@ -135,7 +136,9 @@ class ViewController: UIViewController {
             $0.centerX.equalToSuperview()
         }
     }
-    // 버튼 구성
+    
+    // MARK: - 버튼 구성
+    
     func buttons(title: String, action: Selector, backgroundColor: UIColor) -> UIButton {
         let button = UIButton()
         button.setTitle(title, for: .normal)
@@ -145,14 +148,12 @@ class ViewController: UIViewController {
         button.frame.size = CGSize(width: 80, height: 80)
         button.layer.cornerRadius = 40
         
-        
         //액션 추가
         button.addTarget(self, action: action, for: .touchUpInside)
         
-        
         return button
     }
-    // 스택뷰 구성
+    // MARK: - 스택뷰 구성
     func makeHorizontalStackView(_ views: [UIView]) -> UIStackView {
         let stackView = UIStackView(arrangedSubviews: views)
         stackView.axis = .horizontal
@@ -163,25 +164,34 @@ class ViewController: UIViewController {
         
         return stackView
     }
+    
+    // MARK: - 결과 계산 함수
+    func calculate(expression: String) -> Int? {
+        let expression = NSExpression(format: expression)
+        if let result = expression.expressionValue(with: nil, context: nil) as? Int {
+            return result
+        } else {
+            return nil
+        }
+    }
+    
+    // MARK: - 버튼 액션
+    
     // 숫자버튼 액션
     @objc private func buttonTapped(sender: UIButton) {
-       // 현재 label의 텍스트와 눌린 버튼의 타이틀 가져오기
-        let currentText = label.text ?? ""
-        let buttonText = sender.title(for: .normal)!
-        
-        label.text = currentText + buttonText
-
-        
         print("\(sender.title(for: .normal) ?? "") 버튼 클릭됨")
     }
+    
     // 연산자버튼 액션
     @objc private func operatorButtonTapped(sender: UIButton) {
-        print("\(sender.title(for: .normal) ?? "") 연산자 버튼 클릭됨")
+        print("\(sender.title(for: .normal) ?? "") 연산자 버튼 클릭 됨")
     }
+    
     // 결과버튼 액션
     @objc private func resultButtonTapped(sender: UIButton) {
         print("결과 버튼 클릭됨")
     }
+    
     // 초기화 버튼 액션
     @objc private func initButtonTapped(seder: UIButton) {
         self.label.text = "0"
