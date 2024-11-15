@@ -213,6 +213,13 @@ class ViewController: UIViewController {
     
     // 결과버튼 액션
     @objc private func resultButtonTapped(sender: UIButton) {
+        if let currentText = label.text {
+            if let result = calculate(expression: currentText) {
+                label.text = "\(result)"
+            } else {
+                label.text = "Error"
+            }
+        }
         print("결과 버튼 클릭됨")
     }
     
