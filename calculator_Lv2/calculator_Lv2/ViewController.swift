@@ -9,7 +9,7 @@ import SnapKit
 
 class ViewController: UIViewController {
     
-    let label = UILabel()
+    var label = UILabel()
     // 첫번째 줄
     var button7 = UIButton()
     var button8 = UIButton()
@@ -41,7 +41,7 @@ class ViewController: UIViewController {
     private func configurUI() {
         view.backgroundColor = .black
         
-        label.text = "12345"
+        label.text = "0"
         label.textColor = .white
         label.font = .boldSystemFont(ofSize: 60)
         label.textAlignment = .right
@@ -56,10 +56,10 @@ class ViewController: UIViewController {
         }
         
         // 첫번째 줄 버튼들
-        button7 = buttons(title: "7", action: #selector(buttonTapped(_:)), backgroundColor: .darkGray)
-        button8 = buttons(title: "8", action: #selector(buttonTapped(_:)), backgroundColor: .darkGray)
-        button9 = buttons(title: "9", action: #selector(buttonTapped(_:)), backgroundColor: .darkGray)
-        plusButton = buttons(title: "+", action: #selector(operatorButtonTapped(_:)), backgroundColor: .orange)
+        button7 = buttons(title: "7", action: #selector(buttonTapped), backgroundColor: .darkGray)
+        button8 = buttons(title: "8", action: #selector(buttonTapped), backgroundColor: .darkGray)
+        button9 = buttons(title: "9", action: #selector(buttonTapped), backgroundColor: .darkGray)
+        plusButton = buttons(title: "+", action: #selector(operatorButtonTapped), backgroundColor: .orange)
         
         // 첫번째 줄 스택뷰
         let firstStackView = makeHorizontalStackView([button7, button8, button9, plusButton])
@@ -73,10 +73,10 @@ class ViewController: UIViewController {
         }
         
         // 두번째 줄 버튼들
-        button4 = buttons(title: "4", action: #selector(buttonTapped(_:)), backgroundColor: .darkGray)
-        button5 = buttons(title: "5", action: #selector(buttonTapped(_:)), backgroundColor: .darkGray)
-        button6 = buttons(title: "6", action: #selector(buttonTapped(_:)), backgroundColor: .darkGray)
-        minusButton = buttons(title: "-", action: #selector(operatorButtonTapped(_:)), backgroundColor: .orange)
+        button4 = buttons(title: "4", action: #selector(buttonTapped), backgroundColor: .darkGray)
+        button5 = buttons(title: "5", action: #selector(buttonTapped), backgroundColor: .darkGray)
+        button6 = buttons(title: "6", action: #selector(buttonTapped), backgroundColor: .darkGray)
+        minusButton = buttons(title: "-", action: #selector(operatorButtonTapped), backgroundColor: .orange)
         
         // 두번째 줄 스택뷰
         let secondStackView = makeHorizontalStackView([button4, button5, button6, minusButton])
@@ -90,10 +90,10 @@ class ViewController: UIViewController {
         }
         
         // 세번째 줄 버튼들
-        button1 = buttons(title: "1", action: #selector(buttonTapped(_:)), backgroundColor: .darkGray)
-        button2 = buttons(title: "2", action: #selector(buttonTapped(_:)), backgroundColor: .darkGray)
-        button3 = buttons(title: "3", action: #selector(buttonTapped(_:)), backgroundColor: .darkGray)
-        multiplyButton = buttons(title: "*", action: #selector(operatorButtonTapped(_:)), backgroundColor: .orange)
+        button1 = buttons(title: "1", action: #selector(buttonTapped), backgroundColor: .darkGray)
+        button2 = buttons(title: "2", action: #selector(buttonTapped), backgroundColor: .darkGray)
+        button3 = buttons(title: "3", action: #selector(buttonTapped), backgroundColor: .darkGray)
+        multiplyButton = buttons(title: "*", action: #selector(operatorButtonTapped), backgroundColor: .orange)
         
         // 세번째 줄 스택뷰
         let thirdStackView = makeHorizontalStackView([button1, button2, button3, multiplyButton])
@@ -106,10 +106,10 @@ class ViewController: UIViewController {
             $0.height.equalTo(80)
         }
         // 네번째 줄 버튼들
-        initButton = buttons(title: "AC", action: #selector(buttonTapped(_:)), backgroundColor: .orange)
-        button0 = buttons(title: "0", action: #selector(buttonTapped(_:)), backgroundColor: .darkGray)
-        resultButton = buttons(title: "=", action: #selector(resultButtonTapped(_:)), backgroundColor: .orange)
-        divButton = buttons(title: "/", action: #selector(operatorButtonTapped(_:)), backgroundColor: .orange)
+        initButton = buttons(title: "AC", action: #selector(initButtonTapped), backgroundColor: .orange)
+        button0 = buttons(title: "0", action: #selector(buttonTapped), backgroundColor: .darkGray)
+        resultButton = buttons(title: "=", action: #selector(resultButtonTapped), backgroundColor: .orange)
+        divButton = buttons(title: "/", action: #selector(operatorButtonTapped), backgroundColor: .orange)
         
         // 네번째 줄 스택뷰
         let lastStackView = makeHorizontalStackView([initButton, button0, resultButton, divButton])
@@ -121,17 +121,34 @@ class ViewController: UIViewController {
             $0.top.equalTo(thirdStackView.snp.bottom).offset(10)
             $0.height.equalTo(80)
         }
+        
+        let mainStackView = UIStackView(arrangedSubviews: [firstStackView, secondStackView, thirdStackView, lastStackView])
+            mainStackView.axis = .vertical
+            mainStackView.spacing = 10
+            mainStackView.distribution = .fillEqually
+
+            view.addSubview(mainStackView)
+        
+        mainStackView.snp.makeConstraints {
+            $0.width.equalTo(350)
+            $0.top.equalTo(label.snp.bottom).offset(60)
+            $0.centerX.equalToSuperview()
+        }
     }
     // 버튼 구성
     func buttons(title: String, action: Selector, backgroundColor: UIColor) -> UIButton {
         let button = UIButton()
         button.setTitle(title, for: .normal)
+        button.setTitleColor(.lightGray, for: .highlighted) // 버튼 눌렸을 때 번호 색 변경, 버튼 누르고 있는 동안만 적용
         button.titleLabel?.font = .boldSystemFont(ofSize: 30)
         button.backgroundColor = backgroundColor
         button.frame.size = CGSize(width: 80, height: 80)
         button.layer.cornerRadius = 40
+        
+        
         //액션 추가
         button.addTarget(self, action: action, for: .touchUpInside)
+        
         
         return button
     }
@@ -143,18 +160,35 @@ class ViewController: UIViewController {
         stackView.spacing = 10
         stackView.distribution = .fillEqually
         
+        
         return stackView
     }
     // 숫자버튼 액션
-    @objc private func buttonTapped(_ sender: UIButton) {
+    @objc private func buttonTapped(sender: UIButton) {
+       // 현재 label의 텍스트와 눌린 버튼의 타이틀 가져오기
+        let currentText = label.text ?? ""
+        let buttonText = sender.title(for: .normal)!
+        
+        label.text = currentText + buttonText
+
+        
         print("\(sender.title(for: .normal) ?? "") 버튼 클릭됨")
     }
     // 연산자버튼 액션
-    @objc private func operatorButtonTapped(_ sender: UIButton) {
+    @objc private func operatorButtonTapped(sender: UIButton) {
         print("\(sender.title(for: .normal) ?? "") 연산자 버튼 클릭됨")
     }
     // 결과버튼 액션
-    @objc private func resultButtonTapped(_ sender: UIButton) {
+    @objc private func resultButtonTapped(sender: UIButton) {
         print("결과 버튼 클릭됨")
     }
+    // 초기화 버튼 액션
+    @objc private func initButtonTapped(seder: UIButton) {
+        self.label.text = "0"
+        print("초기화 버튼 클릭됨")
+    }
+    //#Preview {
+    //    ViewController()
+    //}
+    
 }
