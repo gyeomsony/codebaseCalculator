@@ -204,8 +204,13 @@ class ViewController: UIViewController {
         
         // 연산자 추가
         let operatorText = sender.title(for: .normal) ?? ""
+        // 연산자 중복 입력 제거
+        let operators: Set<Character> = ["+", "-", "/", "*"]
+        if let last = currentText.last, operators.contains(last) {
+            return
+        }
         
-        currentText += operatorText 
+        currentText += operatorText
         
         label.text = currentText
         print("\(sender.title(for: .normal) ?? "") 연산자 버튼 클릭 됨")
