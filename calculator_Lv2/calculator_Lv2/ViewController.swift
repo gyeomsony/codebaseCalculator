@@ -205,7 +205,7 @@ class ViewController: UIViewController {
         // 연산자 추가
         let operatorText = sender.title(for: .normal) ?? ""
         
-        currentText += " " + operatorText + " "
+        currentText += operatorText 
         
         label.text = currentText
         print("\(sender.title(for: .normal) ?? "") 연산자 버튼 클릭 됨")
