@@ -122,7 +122,18 @@ class ViewController: UIViewController {
             $0.top.equalTo(thirdStackView.snp.bottom).offset(10)
             $0.height.equalTo(80)
         }
-        
+        // MARK: - horizontal 스택뷰 구성
+        func makeHorizontalStackView(_ views: [UIView]) -> UIStackView {
+            let stackView = UIStackView(arrangedSubviews: views)
+            stackView.axis = .horizontal
+            stackView.backgroundColor = .black
+            stackView.spacing = 10
+            stackView.distribution = .fillEqually
+            
+            
+            return stackView
+        }
+        // MARK: - 전체 묶음 vertical 스택뷰 구성
         let mainStackView = UIStackView(arrangedSubviews: [firstStackView, secondStackView, thirdStackView, lastStackView])
         mainStackView.axis = .vertical
         mainStackView.spacing = 10
@@ -152,17 +163,6 @@ class ViewController: UIViewController {
         button.addTarget(self, action: action, for: .touchUpInside)
         
         return button
-    }
-    // MARK: - 스택뷰 구성
-    func makeHorizontalStackView(_ views: [UIView]) -> UIStackView {
-        let stackView = UIStackView(arrangedSubviews: views)
-        stackView.axis = .horizontal
-        stackView.backgroundColor = .black
-        stackView.spacing = 10
-        stackView.distribution = .fillEqually
-        
-        
-        return stackView
     }
     
     // MARK: - 결과 계산 함수
@@ -195,7 +195,6 @@ class ViewController: UIViewController {
         
         // 새로운 텍스트로 label 업데이트
         label.text = currentText
-        print("\(sender.title(for: .normal) ?? "") 버튼 클릭됨")
     }
     
     // 연산자버튼 액션
@@ -213,7 +212,6 @@ class ViewController: UIViewController {
         currentText += operatorText
         
         label.text = currentText
-        print("\(sender.title(for: .normal) ?? "") 연산자 버튼 클릭 됨")
     }
     
     // 결과버튼 액션
@@ -225,13 +223,11 @@ class ViewController: UIViewController {
                 label.text = "Error"
             }
         }
-        print("결과 버튼 클릭됨")
     }
     
     // 초기화 버튼 액션
     @objc private func initButtonTapped(seder: UIButton) {
         self.label.text = "0"
-        print("초기화 버튼 클릭됨")
     }
     //#Preview {
     //    ViewController()
